@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "65F0C81E-2673-4F16-BC09-B98F3B3C1A08"
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0DF361BA-E0E4-4AE5-B573-EE4F1206411E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Combinestagram/MainViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
+            landmarkName = "unknown"
+            landmarkType = "0">
+            <Locations>
+               <Location
+                  uuid = "0DF361BA-E0E4-4AE5-B573-EE4F1206411E - 5991a3370605c829"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Combinestagram.MainViewController.actionAdd() -&gt; ()"
+                  moduleName = "Combinestagram"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ilhan.sari/Documents/personal/rxSwift/rxs-materials-editions-4.0/04-observables-in-practice/projects/starter/Combinestagram/MainViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "74"
+                  endingLineNumber = "74"
+                  offsetFromSymbolStart = "889">
+               </Location>
+               <Location
+                  uuid = "0DF361BA-E0E4-4AE5-B573-EE4F1206411E - e0a435f2cca73860"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.UIImage) -&gt; () in Combinestagram.MainViewController.actionAdd() -&gt; ()"
+                  moduleName = "Combinestagram"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ilhan.sari/Documents/personal/rxSwift/rxs-materials-editions-4.0/04-observables-in-practice/projects/starter/Combinestagram/MainViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "74"
+                  endingLineNumber = "74"
+                  offsetFromSymbolStart = "107">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
