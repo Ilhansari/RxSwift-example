@@ -59,6 +59,11 @@ class MainViewController: UIViewController {
     .disposed(by: bag)
   }
   
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    print("resources: \(RxSwift.Resources.total)")
+  }
+  
   @IBAction func actionClear() {
     images.accept([])
   }

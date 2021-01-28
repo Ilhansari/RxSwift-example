@@ -42,6 +42,7 @@ class PhotosViewController: UICollectionViewController {
   private lazy var photos = PhotosViewController.loadPhotos()
   private lazy var imageManager = PHCachingImageManager()
   fileprivate var selectedPhotosSubject = PublishSubject<UIImage>()
+  let bag = DisposeBag()
   
   var selectedPhotos: Observable<UIImage> {
     return selectedPhotosSubject.asObserver()
@@ -67,7 +68,7 @@ class PhotosViewController: UICollectionViewController {
 
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
-
+    selectedPhotosSubject.onCompleted()
   }
 
   // MARK: UICollectionView
