@@ -71,10 +71,10 @@ class MainViewController: UIViewController {
   @IBAction func actionSave() {
     guard let image = imagePreview.image else { return }
     PhotoWriter.save(image).subscribe(onError: { error in
-      self.showMessage("Error", description: error.localizedDescription)
+      self.showMessages("Error").subscribe({ _ in }).disposed(by: self.bag)
     }, onCompleted: { [weak self] in
       guard let self = self else { return }
-      self.showMessage("Saved")
+      self.showMessages("Saved").subscribe({ _ in }).disposed(by: self.bag)
       self.actionClear()
     }).disposed(by: bag)
   }
@@ -93,16 +93,24 @@ class MainViewController: UIViewController {
     }
   }
   
-  func showMessage(_ title: String, description: String? = nil) {
-    let alert = UIAlertController(title: title, message: description, preferredStyle: .alert)
-    alert.addAction(UIAlertAction(title: "Close", style: .default, handler: { [weak self] _ in self?.dismiss(animated: true, completion: nil)}))
-    present(alert, animated: true, completion: nil)
-  }
-  
   private func updateUI(photos: [UIImage]) {
     buttonSave.isEnabled = photos.count > 0 && photos.count % 2 == 0
     buttonClear.isEnabled = photos.count > 0
     itemAdd.isEnabled = photos.count < 6
     title = photos.count > 0 ? "\(photos.count) photos" : "Collage"
+  }
+}
+
+extension UIViewController {
+  func showMessages(_ title: String, description: String? = nil) -> Observable<UIAlertAction> {
+    return Observable.create { observer in
+      let alertController = UIAlertController(title: title, message: description, preferredStyle: .alert)
+      let alertAction = UIAlertAction(title: title, style: .default, handler: { _ in
+        observer.onCompleted()
+      })
+      alertController.addAction(alertAction)
+      self.present(alertController, animated: true, completion: nil)
+      return Disposables.create { alertController.dismiss(animated: true, completion: nil) }
+    }
   }
 }
