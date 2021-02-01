@@ -61,7 +61,7 @@ class MainViewController: UIViewController {
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-//    print("resources: \(RxSwift.Resources.total)")
+    print("resources: \(RxSwift.Resources.total)")
   }
   
   @IBAction func actionClear() {
@@ -98,19 +98,5 @@ class MainViewController: UIViewController {
     buttonClear.isEnabled = photos.count > 0
     itemAdd.isEnabled = photos.count < 6
     title = photos.count > 0 ? "\(photos.count) photos" : "Collage"
-  }
-}
-
-extension UIViewController {
-  func showMessages(_ title: String, description: String? = nil) -> Observable<UIAlertAction> {
-    return Observable.create { observer in
-      let alertController = UIAlertController(title: title, message: description, preferredStyle: .alert)
-      let alertAction = UIAlertAction(title: title, style: .default, handler: { _ in
-        observer.onCompleted()
-      })
-      alertController.addAction(alertAction)
-      self.present(alertController, animated: true, completion: nil)
-      return Disposables.create { alertController.dismiss(animated: true, completion: nil) }
-    }
   }
 }
