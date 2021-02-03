@@ -18,6 +18,7 @@ extension PHPhotoLibrary {
           observer.onNext(true)
           observer.onCompleted()
         } else {
+          observer.onNext(false)
           requestAuthorization({ newStatus in
             observer.onNext(newStatus == .authorized)
             observer.onCompleted()

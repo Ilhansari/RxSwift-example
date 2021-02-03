@@ -49,7 +49,9 @@ class MainViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    images.subscribe(onNext: { [weak imagePreview] photos in
+    images
+      .throttle(0.5, scheduler: MainScheduler.instance)
+      .subscribe(onNext: { [weak imagePreview] photos in
       guard let preview = imagePreview else { return }
       preview.image = photos.collage(size: preview.frame.size)
     })
@@ -73,7 +75,8 @@ class MainViewController: UIViewController {
   
   @IBAction func actionSave() {
     guard let image = imagePreview.image else { return }
-    PhotoWriter.save(image).subscribe(onError: { error in
+    PhotoWriter.save(image).share()
+      .subscribe(onError: { error in
       self.alert("Error").subscribe({ _ in }).disposed(by: self.bag)
     }, onCompleted: { [weak self] in
       guard let self = self else { return }
