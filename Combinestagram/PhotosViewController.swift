@@ -66,7 +66,7 @@ class PhotosViewController: UICollectionViewController {
     super.viewDidLoad()
     
     let authorized = PHPhotoLibrary.authorized.share()
-    authorized.skipWhile { $0  == false }
+    authorized.skipWhile { !$0 }
       .take(1)
       .subscribe({ [weak self] _ in
         self?.photos = PhotosViewController.loadPhotos()
@@ -76,15 +76,14 @@ class PhotosViewController: UICollectionViewController {
       }).disposed(by: bag)
     
     authorized
-      .skip(1)
       .takeLast(1)
       .filter { !$0 }
-      .subscribe { [weak self] _ in
+      .subscribe { [weak self] observer in
+        guard (self?.photos.count ?? 0) < 0 else { return }
         guard let errorMessage = self?.errorMessage else { return }
         DispatchQueue.main.async(execute: errorMessage)
       }.disposed(by: bag)
     
-
   }
 
   override func viewWillDisappear(_ animated: Bool) {
@@ -132,7 +131,9 @@ class PhotosViewController: UICollectionViewController {
 // MARK: - Show Alert
 extension PhotosViewController {
   func errorMessage() {
-    alert("No access to Camera Roll", description: "You can grant access to Combinestagram from the settings app").subscribe(onCompleted: { [weak self] in
+    alert("No access to Camera Roll", description: "You can grant access to Combinestagram from the settings app")
+      .take(5.0, scheduler: MainScheduler.instance)
+      .subscribe(onCompleted: { [weak self] in
       self?.dismiss(animated: true, completion: nil)
       self?.navigationController?.popViewController(animated: true)
     }).disposed(by: bag)

@@ -13,7 +13,7 @@ extension UIViewController {
   func alert(_ title: String, description: String? = nil) -> Observable<UIAlertAction> {
     return Observable.create { observer in
       let alertController = UIAlertController(title: title, message: description, preferredStyle: .alert)
-      let alertAction = UIAlertAction(title: title, style: .default, handler: { _ in
+      let alertAction = UIAlertAction(title: "Close", style: .default, handler: { _ in
         observer.onCompleted()
       })
       alertController.addAction(alertAction)
