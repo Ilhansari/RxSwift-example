@@ -42,6 +42,7 @@ class PhotosViewController: UICollectionViewController {
   private lazy var photos = PhotosViewController.loadPhotos()
   private lazy var imageManager = PHCachingImageManager()
   fileprivate var selectedPhotosSubject = PublishSubject<UIImage>()
+  
   let bag = DisposeBag()
   
   var selectedPhotos: Observable<UIImage> {
@@ -73,6 +74,16 @@ class PhotosViewController: UICollectionViewController {
           self?.collectionView.reloadData()
         }
       }).disposed(by: bag)
+    
+    authorized
+      .skip(1)
+      .takeLast(1)
+      .filter { !$0 }
+      .subscribe { [weak self] _ in
+        guard let errorMessage = self?.errorMessage else { return }
+        DispatchQueue.main.async(execute: errorMessage)
+      }.disposed(by: bag)
+    
 
   }
 
@@ -115,5 +126,16 @@ class PhotosViewController: UICollectionViewController {
         self?.selectedPhotosSubject.onNext(image)
       }
     })
+  }
+}
+
+// MARK: - Show Alert
+extension PhotosViewController {
+  func errorMessage() {
+    alert("No access to Camera Roll", description: "You can grant access to Combinestagram from the settings app").subscribe(onCompleted: { [weak self] in
+      self?.dismiss(animated: true, completion: nil)
+      self?.navigationController?.popViewController(animated: true)
+    }).disposed(by: bag)
+    
   }
 }

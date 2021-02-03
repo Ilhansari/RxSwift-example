@@ -74,10 +74,10 @@ class MainViewController: UIViewController {
   @IBAction func actionSave() {
     guard let image = imagePreview.image else { return }
     PhotoWriter.save(image).subscribe(onError: { error in
-      self.showMessages("Error").subscribe({ _ in }).disposed(by: self.bag)
+      self.alert("Error").subscribe({ _ in }).disposed(by: self.bag)
     }, onCompleted: { [weak self] in
       guard let self = self else { return }
-      self.showMessages("Saved").subscribe({ _ in }).disposed(by: self.bag)
+      self.alert("Saved").subscribe({ _ in }).disposed(by: self.bag)
       self.actionClear()
     }).disposed(by: bag)
   }

@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 
 extension UIViewController {
-  func showMessages(_ title: String, description: String? = nil) -> Observable<UIAlertAction> {
+  func alert(_ title: String, description: String? = nil) -> Observable<UIAlertAction> {
     return Observable.create { observer in
       let alertController = UIAlertController(title: title, message: description, preferredStyle: .alert)
       let alertAction = UIAlertAction(title: title, style: .default, handler: { _ in
