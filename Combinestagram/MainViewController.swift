@@ -91,12 +91,10 @@ class MainViewController: UIViewController {
       navigationController?.pushViewController(photosViewController, animated: true)
       photosViewController.selectedPhotos.share().takeWhile{ [weak self] image in
         return (self?.images.value.count  ?? 0) < 6
-      }
-      .filter({ newImage in
-        return newImage.size.width > newImage.size.height
-      }).filter({ [weak self] newImage in
+      }.filter({ [weak self] newImage in
         let len = newImage.pngData()?.count ?? 0
-        guard self?.imageCache.contains(len) == false else {
+        guard self?.imageCache.contains(len) == false
+        && newImage.size.width > newImage.size.height else {
           return false
         }
         self?.imageCache.append(len)
