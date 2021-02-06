@@ -66,7 +66,8 @@ class PhotosViewController: UICollectionViewController {
     super.viewDidLoad()
     
     let authorized = PHPhotoLibrary.authorized.share()
-    authorized.skipWhile { !$0 }
+    authorized
+      .skipWhile { !$0 }
       .take(1)
       .subscribe({ [weak self] _ in
         self?.photos = PhotosViewController.loadPhotos()
