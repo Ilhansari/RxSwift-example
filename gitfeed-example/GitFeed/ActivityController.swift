@@ -70,14 +70,29 @@ class ActivityController: UITableViewController {
   }
 
   @objc func refresh() {
-    DispatchQueue.global(qos: .background).async { [weak self] in
+    DispatchQueue.global(qos: .default).async { [weak self] in
       guard let self = self else { return }
       self.fetchEvents(repo: self.repo)
     }
   }
   
   func fetchEvents(repo: String) {
-    let response = Observable.from([repo])
+    let response = Observable.from(["https://api.github.com/search/repositories?q=language:swift&per_page=5"])
+      .map { urlString -> URL in
+        let url = URL(string: urlString)!
+        return url
+      }
+      .flatMap { url -> Observable<Any> in
+        let request = URLRequest(url: url)
+        return URLSession.shared.rx.json(request: request)
+      }
+      .flatMap { response -> Observable<String> in
+        guard let response = response as? [String: Any],
+              let items = response["items"] as? [[String: Any]] else {
+          return Observable.empty()
+        }
+        return Observable.from(items.map { $0["full_name"] as! String })
+      }
       .map { urlString -> URL in
         return URL(string: "https://api.github.com/repos/\(urlString)/events")!
       }.map { [weak self] url -> URLRequest in
