@@ -70,7 +70,7 @@ class ActivityController: UITableViewController {
   }
 
   @objc func refresh() {
-    DispatchQueue.global(qos: .default).async { [weak self] in
+    DispatchQueue.global(qos: .background).async { [weak self] in
       guard let self = self else { return }
       self.fetchEvents(repo: self.repo)
     }
@@ -87,12 +87,14 @@ class ActivityController: UITableViewController {
         }
         return request
       }.flatMap { request -> Observable<(response: HTTPURLResponse, data: Data)>  in
+        print("main: \(Thread.isMainThread)")
         return URLSession.shared.rx.response(request: request)
       }
       .share(replay: 1)
     
     response
       .filter { response, _ in
+        print("main: \(Thread.isMainThread)")
         return 200..<300 ~= response.statusCode
       }
       .compactMap { _, data -> [Event]? in
@@ -122,6 +124,7 @@ class ActivityController: UITableViewController {
   }
   
   func processEvents(_ newEvents: [Event]) {
+    print("main: \(Thread.isMainThread)")
     var updatedEvents = newEvents + events.value
     if updatedEvents.count > 50 {
       updatedEvents = Array<Event>(updatedEvents.prefix(50))
