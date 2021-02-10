@@ -109,7 +109,6 @@ class ActivityController: UITableViewController {
     
     response
       .filter { response, _ in
-        print("main: \(Thread.isMainThread)")
         return 200..<300 ~= response.statusCode
       }
       .compactMap { _, data -> [Event]? in
