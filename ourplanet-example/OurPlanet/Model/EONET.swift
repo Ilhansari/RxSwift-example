@@ -96,5 +96,20 @@ class EONET {
       return Observable.empty()
     }
   }
+  
+  fileprivate static func events(forLast day: Int, closed: Bool) -> Observable<[EOEvent]> {
+    return EONET.request(endpoint: eventsEndpoint, query: ["days": NSNumber(value: day),
+                                                           "status": (closed ? "closed" : "open")],
+                         contentIdentifier: "events")
+      .catchErrorJustReturn([])
+    
+  }
+  
+  static func events(forLast days: Int = 360) -> Observable<[EOEvent]> {
+    let openEvents = events(forLast: days, closed: false)
+    let closedEvents = events(forLast: days, closed: true)
+    
+    return openEvents.concat(closedEvents)
+  }
 }
 
