@@ -97,19 +97,23 @@ class EONET {
     }
   }
   
-  fileprivate static func events(forLast day: Int, closed: Bool) -> Observable<[EOEvent]> {
-    return EONET.request(endpoint: eventsEndpoint, query: ["days": NSNumber(value: day),
+  fileprivate static func events(forLast day: Int, closed: Bool, endpoint: String) -> Observable<[EOEvent]> {
+    return EONET.request(endpoint: endpoint, query: ["days": NSNumber(value: day),
                                                            "status": (closed ? "closed" : "open")],
                          contentIdentifier: "events")
       .catchErrorJustReturn([])
     
   }
   
-  static func events(forLast days: Int = 360) -> Observable<[EOEvent]> {
-    let openEvents = events(forLast: days, closed: false)
-    let closedEvents = events(forLast: days, closed: true)
+  static func events(forLast days: Int = 360, category: EOCategory) -> Observable<[EOEvent]> {
+    let openEvents = events(forLast: days, closed: false, endpoint: category.endpoint)
+    let closedEvents = events(forLast: days, closed: true, endpoint: category.endpoint)
     
-    return openEvents.concat(closedEvents)
+    return Observable.of(openEvents, closedEvents)
+      .merge()
+      .reduce(([]), accumulator: { running, new in
+        return running + new
+      })
   }
 }
 
